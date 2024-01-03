@@ -9,13 +9,27 @@ class Directories {
     return documentsDir.path;
   }
 
-  void listDrives() {
-    Directory root = Directory('/');
-    List<FileSystemEntity> drives = root.listSync();
+  List<String> listFolders(String parentFolder) {
+    Directory _parentFolder = Directory('$parentFolder/');
+    List<FileSystemEntity> drives = _parentFolder.listSync();
 
-    print('Available Drives:');
+    List<String> folderPaths = [];
     for (var drive in drives) {
-      print(drive.uri.path);
+      folderPaths.add(drive.uri.path);
     }
+    print('Folders in $parentFolder: \n $folderPaths');
+    return folderPaths;
+  }
+
+  String getProgramFiles() {
+    Directory root = Directory('/');
+
+    return root.path;
+  }
+
+  Future<bool> doesFolderExist(String folderName) async {
+    Directory folder = Directory('${getProgramFiles()}$folderName');
+
+    return folder.exists();
   }
 }

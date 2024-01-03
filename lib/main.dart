@@ -1,57 +1,87 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gamesave/utils/directory_handler.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const LandingPage(),
+      home: MyHomePage(),
     );
   }
 }
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
-
+class MyHomePage extends StatefulWidget {
   @override
-  State<LandingPage> createState() => _LandingPageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
-  String path = "";
-  @override
-  void initState() {
-    initialize();
-    super.initState();
+class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController _directoryPathController = TextEditingController();
+  List<String> lastSegments = [];
+
+  void _checkDirectory() {
+    String basePath = _directoryPathController.text;
+
+    Directory baseDirectory = Directory(basePath);
+    if (baseDirectory.existsSync()) {
+      List<Directory> subdirectories = baseDirectory
+          .listSync()
+          .where((entity) => entity is Directory)
+          .cast<Directory>()
+          .toList();
+
+      lastSegments = subdirectories.map((subdirectory) {
+        List<String> pathSegments =
+            subdirectory.path.split(Platform.pathSeparator);
+        return pathSegments.isNotEmpty ? pathSegments.last : '';
+      }).toList();
+    } else {
+      lastSegments.clear();
+    }
+
+    setState(() {});
   }
 
-  void initialize() async {
-    path = await directories.getDocumentsPaths();
-    directories.listDrives();
-  }
-
-  Directories directories = Directories();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {
-          initialize();
-        });
-      }),
-      body: Center(
-        child: Text("$path"),
+      appBar: AppBar(
+        title: Text('Directory Checker'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _directoryPathController,
+              decoration: InputDecoration(labelText: 'Enter directory path'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _checkDirectory,
+              child: Text('Check Directory'),
+            ),
+            SizedBox(height: 20),
+            Text('Last segments of subdirectories:'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: lastSegments.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: SelectableText(lastSegments[index]),
+                    onTap: () {
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
