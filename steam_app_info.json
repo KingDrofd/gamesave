@@ -1,0 +1,24 @@
+{
+  "applist": {
+    "apps": [
+      {
+        "appid": 1888160,
+        "name": "ARMORED CORE™ VI FIRES OF RUBICON™",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\1888160",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/1888160/header.jpg"
+      },
+      {
+        "appid": 241100,
+        "name": "Steam Input Configs",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\241100",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/241100/header.jpg"
+      },
+      {
+        "appid": 367500,
+        "name": "Dragon's Dogma: Dark Arisen",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\367500",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/367500/header.jpg"
+      }
+    ]
+  }
+}
