@@ -1,11 +1,13 @@
 import os
 import requests
 import json
+from pathlib import Path
+
 
 # Gets app info based on id found using check_local_directories, and then jsonify the data
 def get_app_info( app_id):
     url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/' 
-
+    
     try:
         response = requests.get(url)
         data = response.json()
@@ -29,12 +31,48 @@ def get_app_info( app_id):
         return None
 
 
-#TODO Check directories using names and then geting their ids from name 
-#(some games save in other directories without ids and use the name instead, ie. Bioshock, Anno1800)
+# Returns app id by matching the app_name in database
+def get_app_id_from_name( app_name):
+    url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/'
+
+    try:
+        response = requests.get(url)
+        data = response.json()
+
+        if 'applist' in data and 'apps' in data['applist']:
+            apps = data['applist']['apps']
+            for app in apps:
+                if app['name'] == app_name:
+                    return app['appid']        
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+# Returns app name by matching id with ids in database
+def get_app_name_from_id( app_id):
+    url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/'
+
+    try:
+        response = requests.get(url)
+        data = response.json()
+
+        if 'applist' in data and 'apps' in data['applist']:
+            apps = data['applist']['apps']
+            for app in apps:
+                if app['appid'] == app_id:
+                    return app['name']
+
+        print(f"Error: Unable to find information for App ID: {app_id}.")
+        return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
 
 
 # Checks provided list paths for subdirectories with an id as a name
-def check_local_directories( base_paths):
+def check_local_directories(base_paths):
     result_data = {'applist': {'apps': []}}
 
     for base_path in base_paths:
@@ -42,16 +80,28 @@ def check_local_directories( base_paths):
             subdir_path = os.path.join(base_path, subdir)
             if os.path.isdir(subdir_path):
                 try:
-                    app_id = int(subdir)
-                    app_info = get_app_info( app_id)
-                    if app_info:
-                        app_info['directory'] = subdir_path # We update directory information here.
-                        result_data['applist']['apps'].append(app_info)
-                        print(f"App ID: {app_id}, App Name: {app_info['name']}, Directory: {subdir_path}")
+                    app_id_from_name = get_app_id_from_name( subdir)
+                    app_id_from_subdir = int(subdir) if subdir.isdigit() else None
+
+                    if app_id_from_subdir is not None:
+                        app_id = app_id_from_subdir
+                        app_name = get_app_name_from_id( app_id_from_subdir)
+                    elif app_id_from_name is not None:
+                        app_id = app_id_from_name
+                        app_name = subdir
                     else:
-                        print(f"Unable to retrieve information for App ID: {app_id}")
-                except ValueError:
-                    print(f"Skipping non-numeric directory: {subdir}")
+                        raise ValueError("Both app ID from name and subdirectory are invalid.")
+
+                    app_info = {
+                        'appid': app_id,
+                        'name': app_name,
+                        'directory': subdir_path,
+                        'image_link': f'http://cdn.akamai.steamstatic.com/steam/apps/{app_id}/header.jpg'
+                    }
+                    result_data['applist']['apps'].append(app_info)
+                    print(f"App ID: {app_id}, App Name: {app_name}, Directory: {subdir_path}")
+                except ValueError as e:
+                    print(f"Skipping subdirectory: {subdir}, {e}")
 
     return result_data
 
@@ -64,6 +114,10 @@ def main():
  
     user_data_paths = [
         r'C:\Program Files (x86)\Steam\userdata\443815666',
+        r'C:\Users\Public\Documents\EMPRESS',
+        r'C:\Users\Public\Documents\Steam\CODEX',
+        r'C:\Users\username\AppData\Roaming',
+        str(Path.home() / 'Documents/My Games')   # This line is for future implementation of searching for saves with names, not just ids
         # Other paths here
     ]
 

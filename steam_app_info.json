@@ -8,6 +8,18 @@
         "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/1888160/header.jpg"
       },
       {
+        "appid": 220,
+        "name": "Half-Life 2",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\220",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/220/header.jpg"
+      },
+      {
+        "appid": 2371090,
+        "name": null,
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\2371090",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/2371090/header.jpg"
+      },
+      {
         "appid": 241100,
         "name": "Steam Input Configs",
         "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\241100",
@@ -18,6 +30,72 @@
         "name": "Dragon's Dogma: Dark Arisen",
         "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\367500",
         "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/367500/header.jpg"
+      },
+      {
+        "appid": 431960,
+        "name": "Wallpaper Engine",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\431960",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/431960/header.jpg"
+      },
+      {
+        "appid": 49520,
+        "name": "Borderlands 2",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\49520",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/49520/header.jpg"
+      },
+      {
+        "appid": 7,
+        "name": "Steam Client",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\7",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/7/header.jpg"
+      },
+      {
+        "appid": 70,
+        "name": "Half-Life",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\70",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg"
+      },
+      {
+        "appid": 760,
+        "name": "Steam Screenshots",
+        "directory": "C:\\Program Files (x86)\\Steam\\userdata\\443815666\\760",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/760/header.jpg"
+      },
+      {
+        "appid": 1446780,
+        "name": "MONSTER HUNTER RISE",
+        "directory": "C:\\Users\\Public\\Documents\\EMPRESS\\1446780",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/1446780/header.jpg"
+      },
+      {
+        "appid": 582010,
+        "name": "Monster Hunter: World",
+        "directory": "C:\\Users\\Public\\Documents\\Steam\\CODEX\\582010",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/582010/header.jpg"
+      },
+      {
+        "appid": 427520,
+        "name": "Factorio",
+        "directory": "C:\\Users\\username\\AppData\\Roaming\\Factorio",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/427520/header.jpg"
+      },
+      {
+        "appid": 1250410,
+        "name": "Microsoft Flight Simulator",
+        "directory": "C:\\Users\\username\\AppData\\Roaming\\Microsoft Flight Simulator",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/1250410/header.jpg"
+      },
+      {
+        "appid": 49520,
+        "name": "Borderlands 2",
+        "directory": "C:\\Users\\username\\Documents\\My Games\\Borderlands 2",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/49520/header.jpg"
+      },
+      {
+        "appid": 444090,
+        "name": "Paladins",
+        "directory": "C:\\Users\\username\\Documents\\My Games\\Paladins",
+        "image_link": "http://cdn.akamai.steamstatic.com/steam/apps/444090/header.jpg"
       }
     ]
   }
