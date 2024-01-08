@@ -2,10 +2,11 @@ import os
 import requests
 import json
 from pathlib import Path
-
+import scan
+import directories
 
 # Gets app info based on id found using check_local_directories, and then jsonify the data
-def get_app_info( app_id):
+def get_app_info(app_id):
     url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/' 
     
     try:
@@ -31,46 +32,6 @@ def get_app_info( app_id):
         return None
 
 
-# Returns app id by matching the app_name in database
-def get_app_id_from_name( app_name):
-    url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/'
-
-    try:
-        response = requests.get(url)
-        data = response.json()
-
-        if 'applist' in data and 'apps' in data['applist']:
-            apps = data['applist']['apps']
-            for app in apps:
-                if app['name'] == app_name:
-                    return app['appid']        
-        
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
-
-# Returns app name by matching id with ids in database
-def get_app_name_from_id( app_id):
-    url = f'http://api.steampowered.com/ISteamApps/GetAppList/v2/'
-
-    try:
-        response = requests.get(url)
-        data = response.json()
-
-        if 'applist' in data and 'apps' in data['applist']:
-            apps = data['applist']['apps']
-            for app in apps:
-                if app['appid'] == app_id:
-                    return app['name']
-
-        print(f"Error: Unable to find information for App ID: {app_id}.")
-        return None
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
-
-
-
 # Checks provided list paths for subdirectories with an id as a name
 def check_local_directories(base_paths):
     result_data = {'applist': {'apps': []}}
@@ -80,12 +41,12 @@ def check_local_directories(base_paths):
             subdir_path = os.path.join(base_path, subdir)
             if os.path.isdir(subdir_path):
                 try:
-                    app_id_from_name = get_app_id_from_name( subdir)
+                    app_id_from_name = scan.get_app_id_from_name( subdir)
                     app_id_from_subdir = int(subdir) if subdir.isdigit() else None
 
                     if app_id_from_subdir is not None:
                         app_id = app_id_from_subdir
-                        app_name = get_app_name_from_id( app_id_from_subdir)
+                        app_name = scan.get_app_name_from_id(app_id_from_subdir)
                     elif app_id_from_name is not None:
                         app_id = app_id_from_name
                         app_name = subdir
@@ -112,16 +73,9 @@ def save_to_json(data, filename='steam_app_info.json'):
 
 def main():
  
-    user_data_paths = [
-        r'C:\Program Files (x86)\Steam\userdata\443815666',
-        r'C:\Users\Public\Documents\EMPRESS',
-        r'C:\Users\Public\Documents\Steam\CODEX',
-        r'C:\Users\username\AppData\Roaming',
-        str(Path.home() / 'Documents/My Games')   # This line is for future implementation of searching for saves with names, not just ids
-        # Other paths here
-    ]
+    
 
-    result_data = check_local_directories(user_data_paths)
+    result_data = check_local_directories(directories.user_data_paths)
     save_to_json(result_data) 
 
 if __name__ == "__main__":
