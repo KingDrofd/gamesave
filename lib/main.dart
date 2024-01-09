@@ -65,15 +65,15 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4, // You can adjust the cross-axis count as needed
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 200 / 100,
+          crossAxisCount: 4,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
         ),
         itemBuilder: (context, index) {
           if (index < jsonData.length) {
-            return GameInfoCard(
-              jsonData: jsonData,
-              index: index,
-            );
+            return GameInfoCard(jsonData: jsonData, index: index);
           } else {
             return SizedBox.shrink();
           }
@@ -94,21 +94,21 @@ class GameInfoCard extends StatelessWidget {
   final int index;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Image.network(
-            '${jsonData[index]['image_link']}',
-            errorBuilder: (context, error, stackTrace) {
-              return Text("No Image");
-            },
-          ),
-          Gap(10),
-          Text('${jsonData[index]["name"]}'),
-          Text('Id: ${jsonData[index]["appid"]}'),
-          Text('Location: ${jsonData[index]["directory"]}'),
-        ],
-      ),
+    return Image.network(
+      '${jsonData[index]['image_link']}',
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Placeholder(),
+            Text(
+              "No Image",
+              style: TextStyle(fontSize: 30),
+            ),
+          ],
+        );
+      },
     );
   }
 }
