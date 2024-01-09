@@ -66,8 +66,10 @@ def check_local_directories(base_paths):
 
     return result_data
 
+save_path = str(Path.home() / 'Documents')
+
 # Pretty self-explanatory, saves data in a json file
-def save_to_json(data, filename='steam_app_info.json'):
+def save_to_json(data, filename= os.path.join(save_path, 'steam_app_info.json') ):
     with open(filename, 'w', encoding='utf-8') as json_file:
         json.dump(data, json_file, ensure_ascii=False, indent=4)
 
