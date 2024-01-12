@@ -37,6 +37,33 @@ class _MainPageState extends State<MainPage> {
     super.initState();
   }
 
+  //TODO ASAP: FIX MEMORY AND DISK USAGE.
+  void copyFolder(String sourcePath, String destinationPath) {
+    Directory sourceDir = Directory(sourcePath);
+    Directory destinationDir = Directory(destinationPath);
+
+    if (sourceDir.existsSync()) {
+      destinationDir.createSync(recursive: true);
+
+      for (var entity in sourceDir.listSync(recursive: true)) {
+        if (entity is File) {
+          File file = File(entity.path);
+          String newPath =
+              destinationDir.path + '/' + entity.uri.pathSegments.last;
+          file.copySync(newPath);
+        } else if (entity is Directory) {
+          Directory dir = Directory(entity.path);
+          String newPath =
+              destinationDir.path + '/' + entity.uri.pathSegments.last;
+          copyFolder(dir.path, newPath);
+        }
+      }
+      print('Folder copied successfully!');
+    } else {
+      print('Source folder does not exist.');
+    }
+  }
+
   Future<List<Map<String, dynamic>>> readJsonFile() async {
     try {
       String documentDir = await directories.getDocumentsPaths();
@@ -63,7 +90,20 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: const Color.fromARGB(255, 36, 36, 36),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              final jsonData = await jsonDataFuture;
+              String documentDir = await directories.getDocumentsPaths();
+
+              for (int i = 0; i < jsonData.length; i++) {
+                String sanitizedName = jsonData[i]['name'].replaceAll(':', '-');
+                var directory = await Directory(
+                        '$documentDir/backup-game-save/$sanitizedName')
+                    .create(recursive: true);
+                final sourcePath = jsonData[i]['directory'];
+                final destinationPath = '${directory.path}';
+                copyFolder(sourcePath, destinationPath);
+              }
+            },
             icon: Icon(
               Icons.file_upload,
               color: Colors.grey,
